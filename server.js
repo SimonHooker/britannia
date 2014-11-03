@@ -28,9 +28,15 @@ io.on('connection',function(client){
 
 		var nickname = client.nickname;
 
-		client.broadcast.emit('messages',nickname+': '+message);
+		client.broadcast.emit('messages',{
+			nickname: client.nickname,
+			message: message
+		});
 
-		client.emit('messages',nickname+': '+message);
+		client.emit('messages',{
+			nickname: client.nickname,
+			message: message
+		});
 
 	});
 
