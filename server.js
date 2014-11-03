@@ -3,11 +3,24 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
-app.get('/', function(req, res) {
+app.get('/',function(req, res){
    res.sendfile('./index.html');
 });
-app.get('/jquery.js', function(req, res) {
-   res.sendfile('./jquery-2.1.1.min.js');
+
+app.get('/ember.js',function(req,res){
+	res.sendfile('./js/libs/ember-1.8.0.js');
+});
+
+app.get('/handlebars.js',function(req,res){
+	res.sendfile('./js/libs/handlebars-v1.3.0.js');
+});
+
+app.get('/jquery.js', function(req, res){
+   res.sendfile('./js/libs/jquery-2.1.1.min.js');
+});
+
+app.get('/app.js',function(req,res){
+	res.sendfile('./js/app.js');
 });
 
 app.use(express.static('public'));
