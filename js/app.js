@@ -1,4 +1,4 @@
-App = Ember.Application.create();
+var App = Ember.Application.create();
 
 App.Router.map(function() {
 	this.route('game');
@@ -6,24 +6,19 @@ App.Router.map(function() {
 
 App.ChatMessagesController = Ember.ArrayController.create();
 
+var socket = io.connect('http://'+window.location.hostname+':80');
+
+function Britannia(nickname) {
+	socket.on('connect',function(data){
+		socket.emit('join',nickname);
+	});
+	socket.on('messages',function(data){
+		App.ChatMessagesController.unshiftObject(data);
+	});
+}
 
 $(function(){
-	// use the socket.io server to connect to localhost:8080 here
-	var socket = io.connect('http://'+window.location.hostname+':80');
-
-	var insertMessage = function(data) {
-		App.ChatMessagesController.unshiftObject(data);
-	};
-
-	socket.on('connect',function(data){
-		$('#status').html('Connected to Britannia');
-		/*
-		nickname = prompt('Who are you?');
-		*/
-		socket.emit('join','Foo');
-	});
-
-	socket.on('messages',insertMessage);
+	var bt = new Britannia( 'foo' );
 
 	$('div.chat-frame').on('click','form button',function(e){
 		e.preventDefault();
