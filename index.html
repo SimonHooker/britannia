@@ -9,5 +9,10 @@
        You just deployed your first Express App <br/>
        with AWS OpsWorks.
     </h2>
+    <script src="/socket.io/socket.io.js"></script>
+	<script>
+		// use the socket.io server to connect to localhost:8080 here
+		io.connect('http://'+window.location.hostname+':80');
+	</script>
 </body>
 </html>
