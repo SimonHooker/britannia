@@ -1,16 +1,20 @@
 var express = require('express');
+var lessMiddleware = require('less-middleware');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+
+app.use(lessMiddleware(__dirname+'/css'));
+app.use('/js',express.static(__dirname+'/js'));
+app.use('/fonts',express.static(__dirname+'/fonts'));
 
 app.get('/',function(req, res){
    res.sendfile('./index.html');
 });
 
-app.use(express.static('public'));
-app.use('/js',express.static(__dirname+'/js'));
-app.use('/css',express.static(__dirname+'/css'));
-app.use('/fonts',express.static(__dirname+'/fonts'));
+app.get('/britannia.css',function(req,res){
+	res.sendfile('./css/britannia.css');
+});
 
 io.on('connection',function(client){
 
