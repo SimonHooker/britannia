@@ -3,29 +3,58 @@
 <head>
 	<title>Britannia</title>
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-	<link rel="stylesheet" href="/css/libs/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/libs/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="/britannia.css">
 </head>
 <body>
 
-	<script type="text/x-handlebars">
-		<h2>Welcome to Britannia</h2>
 
-		{{outlet}}
+
+	<script type="text/x-handlebars">
+
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Britannia</a>
+				</div>
+				<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						{{#link-to 'index' tagName='li'}}Home{{/link-to}}
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			{{outlet}}
+		</div>
 	</script>
 
 	<script type="text/x-handlebars" id="index">
-		<div id="chat_target"></div>
-		<form id="chat_form">
-			<input id="chat_input">
-		</form>
+
+		<div class="starter-template">
+			<h1>Bootstrap starter template</h1>
+			<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+			<p>
+				<div id="chat_target"></div>
+				<form id="chat_form">
+					<input id="chat_input">
+				</form>
+			</p>
+		</div>
+
 	</script>
 
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/js/libs/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript" src="/js/libs/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/js/libs/handlebars-v1.3.0.js"></script>
 	<script type="text/javascript" src="/js/libs/ember-1.8.0.js"></script>
-	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/js/app.js"></script>
 </body>
 </html>
