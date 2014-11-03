@@ -1,14 +1,10 @@
 App = Ember.Application.create();
 
 App.Router.map(function() {
-  // put your routes here
+	this.route('game');
 });
 
-App.IndexRoute = Ember.Route.extend({
-  model: function() {
-    return ['red', 'yellow', 'blue'];
-  }
-});
+App.ChatMessagesController = Ember.ArrayController.create();
 
 
 $(function(){
@@ -16,24 +12,30 @@ $(function(){
 	var socket = io.connect('http://'+window.location.hostname+':80');
 
 	var insertMessage = function(data) {
-		$('#chat_target').append($('<p>'+data+'<p>'));
+		App.ChatMessagesController.unshiftObject(data);
 	};
 
 	socket.on('connect',function(data){
 		$('#status').html('Connected to Britannia');
+		/*
 		nickname = prompt('Who are you?');
-		socket.emit('join',nickname);
+		*/
+		socket.emit('join','Foo');
 	});
 
-	socket.on('messages',function(data){
-		insertMessage(data);
-	});
+	socket.on('messages',insertMessage);
 
-	$('#chat_form').submit(function(e){
+	$('div.chat-frame').on('click','form button',function(e){
 		e.preventDefault();
-		var message = $('#chat_input').val();
-		$('#chat_input').val('');
-		socket.emit( 'messages' , message );
+		$(this).closest('form').trigger('submit');
+	}).on('submit','form',function(e){
+		e.preventDefault();
+		var self = $(this).find('input');
+		var message = self.val();
+		if (message.length > 0) {
+			self.val('');
+			socket.emit( 'messages' , message );
+		}
 	});
 
 });
