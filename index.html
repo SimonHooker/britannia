@@ -1,18 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Opsworks Demo Node.js App</title>
+	<title>Britannia</title>
 </head>
 <body>
-  <h1>Congratulations!</h1>
-    <h2>
-       You just deployed your first Express App <br/>
-       with AWS OpsWorks.
-    </h2>
-    <script src="/socket.io/socket.io.js"></script>
+    <div id="chat_target"></div>
+    <form id="chat_form">
+    	<input id="chat_input">
+    </form>
+    <script type="text/javascript" src="/jquery.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script>
-		// use the socket.io server to connect to localhost:8080 here
-		io.connect('http://'+window.location.hostname+':80');
+
+		$(function(){
+			// use the socket.io server to connect to localhost:8080 here
+			var socket = io.connect('http://'+window.location.hostname+':80');
+
+			var insertMessage = function(data) {
+				$('#chat_target').append($('<p>'+data+'<p>'));
+			};
+
+			socket.on('connect',function(data){
+				$('#status').html('Connected to Britannia');
+				nickname = prompt('Who are you?');
+				socket.emit('join',nickname);
+			});
+
+			socket.on('messages',function(data){
+				insertMessage(data);
+			});
+
+			$('#chat_form').submit(function(e){
+				e.preventDefault();
+				var message = $('#chat_input').val();
+				$('#chat_input').val('');
+				socket.emit( 'messages' , message );
+			});
+
+		});
 	</script>
 </body>
 </html>
