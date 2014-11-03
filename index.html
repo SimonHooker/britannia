@@ -2,42 +2,27 @@
 <html>
 <head>
 	<title>Britannia</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 </head>
 <body>
-    <div id="chat_target"></div>
-    <form id="chat_form">
-    	<input id="chat_input">
-    </form>
-    <script type="text/javascript" src="/jquery.js"></script>
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-	<script>
 
-		$(function(){
-			// use the socket.io server to connect to localhost:8080 here
-			var socket = io.connect('http://'+window.location.hostname+':80');
+	<script type="text/x-handlebars">
+		<h2>Welcome to Britannia</h2>
 
-			var insertMessage = function(data) {
-				$('#chat_target').append($('<p>'+data+'<p>'));
-			};
-
-			socket.on('connect',function(data){
-				$('#status').html('Connected to Britannia');
-				nickname = prompt('Who are you?');
-				socket.emit('join',nickname);
-			});
-
-			socket.on('messages',function(data){
-				insertMessage(data);
-			});
-
-			$('#chat_form').submit(function(e){
-				e.preventDefault();
-				var message = $('#chat_input').val();
-				$('#chat_input').val('');
-				socket.emit( 'messages' , message );
-			});
-
-		});
+		{{outlet}}
 	</script>
+
+	<script type="text/x-handlebars" id="index">
+		<div id="chat_target"></div>
+		<form id="chat_form">
+			<input id="chat_input">
+		</form>
+	</script>
+
+	<script type="text/javascript" src="/jquery.js"></script>
+	<script type="text/javascript" src="/handlebars.js"></script>
+	<script type="text/javascript" src="/ember.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/app.js"></script>
 </body>
 </html>
