@@ -7,23 +7,10 @@ app.get('/',function(req, res){
    res.sendfile('./index.html');
 });
 
-app.get('/ember.js',function(req,res){
-	res.sendfile('./js/libs/ember-1.8.0.js');
-});
-
-app.get('/handlebars.js',function(req,res){
-	res.sendfile('./js/libs/handlebars-v1.3.0.js');
-});
-
-app.get('/jquery.js', function(req, res){
-   res.sendfile('./js/libs/jquery-2.1.1.min.js');
-});
-
-app.get('/app.js',function(req,res){
-	res.sendfile('./js/app.js');
-});
-
 app.use(express.static('public'));
+app.use('/js',express.static(__dirname+'/js'));
+app.use('/css',express.static(__dirname+'/css'));
+app.use('/fonts',express.static(__dirname+'/fonts'));
 
 io.on('connection',function(client){
 
