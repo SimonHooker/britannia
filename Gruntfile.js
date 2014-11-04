@@ -8,7 +8,6 @@ module.exports = function(grunt) {
 				exclude: [],
 				dependencies: {
 					'ember': 'jquery',
-					'ember-data': 'ember',
 					'bootstrap': 'jquery'
 				},
 				bowerOptions: {
