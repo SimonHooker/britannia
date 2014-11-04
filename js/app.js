@@ -1,23 +1,56 @@
 var App = Ember.Application.create();
 
 App.Router.map(function() {
-	this.route('game');
+
+	this.resource('games');
+
+	this.resource('game',{ path: '/games/:id' });
+
 });
 
-App.ChatMessagesController = Ember.ArrayController.create();
+App.GAMES = [];
+App.GAMES.pushObject({
+	id: '1',
+	name: 'foo'
+});
+App.GAMES.pushObject({
+	id: '2',
+	name: 'bar'
+});
+App.GAMES.pushObject({
+	id: '3',
+	name: 'fubar'
+});
 
-function Britannia(server,nickname) {
-	var game = this;
+App.CHATMESSAGES = [];
 
-	this.socket = io.connect('http://'+server+':80');
+App.GamesRoute = Ember.Route.extend({
+	model: function() {
+		return App.GAMES;
+	}
+});
 
-	this.socket.on('connect',function(data){
-		game.socket.emit('join',nickname);
-	});
+App.GameRoute = Ember.Route.extend({
+	model: function(params) {
+		return App.GAMES.findBy('id',params.id);
+	}
+});
 
-	this.socket.on('messages',function(data){
-		App.ChatMessagesController.unshiftObject(data);
-	});
+
+var socket = io.connect('http://'+window.location.hostname+':80');
+
+socket.on('connect',function(data){
+	socket.emit('join','foo');
+});
+
+socket.on('messages',function(data){
+	App.CHATMESSAGES.unshiftObject(data);
+});
+
+
+
+$(function(){
+
 
 	$('div.chat-frame')
 		.on('click','form button',function(e){
@@ -30,14 +63,8 @@ function Britannia(server,nickname) {
 			var message = self.val();
 			if (message.length > 0) {
 				self.val('');
-				game.socket.emit( 'messages' , message );
+				socket.emit( 'messages' , message );
 			}
 		});
 
-}
-
-var bt = undefined;
-
-$(function(){
-	bt = new Britannia( window.location.hostname , 'foo' );
 });
