@@ -15,9 +15,8 @@
     "tests"
   ],
   "dependencies": {
-    "ember": "~1.8.0",
-    "jquery": "~2.1.1",
+    "socket.io-client": "~1.2.0",
     "bootstrap": "~3.3.0",
-    "socket.io-client": "~1.2.0"
+    "ember": "~1.8.0"
   }
 }
