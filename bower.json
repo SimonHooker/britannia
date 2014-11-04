@@ -18,6 +18,11 @@
     "ember-data": "~0.0.14",
     "ember": "~1.8.0",
     "jquery": "~2.1.1",
-    "bootstrap": "~3.3.0"
+    "bootstrap": "~3.3.0",
+    "ember-sockets": "~0.6.10"
+  },
+  "resolutions": {
+    "ember": "~1.8.0",
+    "jquery": "~2.1.1"
   }
 }

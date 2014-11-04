@@ -1,5 +1,13 @@
-var App = Ember.Application.create();
-App.Store = DS.Store.extend();
+var App = Ember.Application.create({
+	Store: DS.Store.extend({
+		adapter: 'DS.FixtureAdapter'
+	}),
+    Socket: EmberSockets.extend({
+        host: window.location.hostname,
+        port: 80,
+        controllers: []
+    })
+});
 
 App.Router.map(function() {
 
@@ -37,7 +45,7 @@ App.GameRoute = Ember.Route.extend({
 	}
 });
 
-
+/*
 var socket = io.connect('http://'+window.location.hostname+':80');
 
 socket.on('connect',function(data){
@@ -69,3 +77,4 @@ $(function(){
 		});
 
 });
+*/
