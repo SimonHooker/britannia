@@ -1,63 +1,39 @@
 var App = Ember.Application.create();
+var socket = io.connect('http://'+window.location.hostname+':80');
 
 App.Router.map(function() {
-
-	this.resource('games');
-
-	this.resource('game',{ path: '/games/:id' });
-
+	this.resource('game');
 });
 
-App.GAMES = [];
-App.GAMES.pushObject({
-	id: '1',
-	name: 'foo'
-});
-App.GAMES.pushObject({
-	id: '2',
-	name: 'bar'
-});
-App.GAMES.pushObject({
-	id: '3',
-	name: 'fubar'
-});
+App.Chat = [];
 
-App.CHATMESSAGES = [];
-
-App.GamesRoute = Ember.Route.extend({
-	model: function() {
-		return App.GAMES;
-	}
-});
+App.Game = {
+	chat: App.Chat
+};
 
 App.GameRoute = Ember.Route.extend({
-	model: function(params) {
-		return App.GAMES.findBy('id',params.id);
+	model: function() {
+		return App.Game;
 	}
 });
-
-
-var socket = io.connect('http://'+window.location.hostname+':80');
 
 socket.on('connect',function(data){
 	socket.emit('join','foo');
 });
 
 socket.on('messages',function(data){
-	App.CHATMESSAGES.unshiftObject(data);
+	App.Game.chat.unshiftObject(data);
 });
-
-
 
 $(function(){
 
 
 	$('body')
-		.on('click','div.chat-frame form button',function(e){
+		.on('click','form.chat-form button',function(e){
 			e.preventDefault();
 			$(this).closest('form').trigger('submit');
 		})
-		.on('submit','div.chat-frame form',function(e){
+		.on('submit','form.chat-form',function(e){
 			e.preventDefault();
 			var self = $(this).find('input');
 			var message = self.val();
