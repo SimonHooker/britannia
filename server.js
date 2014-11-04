@@ -9,7 +9,7 @@ app.use('/js',express.static(__dirname+'/js'));
 app.use('/fonts',express.static(__dirname+'/fonts'));
 
 app.get('/',function(req, res){
-   res.sendfile('./index.html');
+	res.sendfile('./index.html');
 });
 
 app.get('/britannia.css',function(req,res){
