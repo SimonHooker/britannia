@@ -7,6 +7,7 @@ var io = require('socket.io')(server);
 app.use(lessMiddleware(__dirname+'/css'));
 app.use('/js',express.static(__dirname+'/js'));
 app.use('/fonts',express.static(__dirname+'/fonts'));
+app.use('/tests',express.static(__dirname+'/tests'));
 
 app.get('/',function(req, res){
 	res.sendfile('./index.html');
