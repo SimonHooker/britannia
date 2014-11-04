@@ -25,7 +25,7 @@
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						{{#link-to 'index' tagName='li' href=false}}<a href="#">Home</a>{{/link-to}}
-						{{#link-to 'game' tagName='li' href=false}}<a href="#">Game</a>{{/link-to}}
+						{{#link-to 'games' tagName='li' href=false}}<a href="#">Game</a>{{/link-to}}
 					</ul>
 				</div>
 			</div>
@@ -47,6 +47,16 @@
 
 	</script>
 
+	<script type="text/x-handlebars" id="games">
+		<div class="container">
+			<ul>
+				{{#each}}
+					{{#link-to 'game' this tagName='li'}}Game ID <strong>{{id}}</strong>{{/link-to}}
+				{{/each}}
+			</ul>
+		</div>
+	</script>
+
 	<script type="text/x-handlebars" id="game">
 
 		<div class="container-fluid game-board">
@@ -60,7 +70,7 @@
 					</div>
 				</form>
 				<ul class="chat-output">
-					{{#each App.ChatMessagesController}}
+					{{#each App.CHATMESSAGES}}
 						<li>
 							<strong>{{nickname}}:</strong> {{message}}
 						</li>
@@ -68,7 +78,7 @@
 				</ul>
 			</div>
 			<div class="col-xs-9 col-xs-offset-3 main-frame">
-				<h1>Game board</h1>
+				<h1>Game board for game ID {{id}}: {{name}}</h1>
 				<p>Board goes here</p>
 			</div>
 		</div>
