@@ -52,12 +52,12 @@ socket.on('messages',function(data){
 $(function(){
 
 
-	$('div.chat-frame')
-		.on('click','form button',function(e){
+	$('body')
+		.on('click','div.chat-frame form button',function(e){
 			e.preventDefault();
 			$(this).closest('form').trigger('submit');
 		})
-		.on('submit','form',function(e){
+		.on('submit','div.chat-frame form',function(e){
 			e.preventDefault();
 			var self = $(this).find('input');
 			var message = self.val();
