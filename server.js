@@ -28,7 +28,11 @@ io.on('connection',function(client){
 
 	client.on('join',function(name){
 
+		console.log(name+' signed in');
 		client.nickname = name;
+		client.emit('signedin',{
+			nickname: name
+		});
 
 	});
 
