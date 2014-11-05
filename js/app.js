@@ -2,45 +2,48 @@ var App = Ember.Application.create();
 var socket = io.connect('http://'+window.location.hostname+':80');
 
 App.Router.map(function() {
-	this.resource('game');
+	this.resource('game',{ path: '/' });
 });
 
-App.Chat = [];
+App.CHAT = [];
 
-App.Game = {
-	chat: App.Chat
-};
-
-App.User = {
-	name: 'afsfas'
+App.GAME = {
+	chat: App.CHAT
 };
 
 App.ApplicationRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
 		this._super();
-		this.render( App.User.name.length > 0 ? 'signin-welcome' : 'signin-form' , {
+		this.render( 'signin-form' , {
 			into: 'application',
 			outlet: 'signin'
+		});
+		this.render( 'chat' , {
+			into: 'application',
+			outlet: 'chat'
 		});
 	}
 });
 
 
 App.GameRoute = Ember.Route.extend({
+	renderTemplate: function(controller,model) {
+		this._super();
+	},
 	model: function() {
-		return App.Game;
+		return App.GAME;
 	}
 });
 
-socket.on('connect',function(data){
-});
+
+socket.on('connect',function(data){});
 
 socket.on('messages',function(data){
-	App.Game.chat.unshiftObject(data);
+	App.CHAT.unshiftObject(data);
 });
 
 socket.on('signedin',function(data){
-	App.User.name = data.nickname;
+	$('div.signin-modal').remove();
 });
 
 $(function(){

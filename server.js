@@ -28,7 +28,6 @@ io.on('connection',function(client){
 
 	client.on('join',function(name){
 
-		console.log(name+' signed in');
 		client.nickname = name;
 		client.emit('signedin',{
 			nickname: name
@@ -38,20 +37,14 @@ io.on('connection',function(client){
 
 	client.on('messages',function(message){
 
-		var nickname = client.nickname;
-		var timestamp = new Date();
-
-		client.broadcast.emit('messages',{
-			timestamp: timestamp,
+		var transmitMe = {
+			timestamp: new Date(),
 			nickname: client.nickname,
 			message: message
-		});
+		};
 
-		client.emit('messages',{
-			timestamp: timestamp,
-			nickname: client.nickname,
-			message: message
-		});
+		client.broadcast.emit('messages',transmitMe);
+		client.emit('messages',transmitMe);
 
 	});
 

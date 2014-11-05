@@ -24,72 +24,79 @@
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						{{#link-to 'index' tagName='li' href=false}}<a href="#">Home</a>{{/link-to}}
-						{{#link-to 'game' tagName='li' className='inactive' href=false}}<a href="#">Game Board</a>{{/link-to}}
+						{{#link-to 'game' tagName='li' href=false}}<a href="#">Game board</a>{{/link-to}}
 					</ul>
 
-					{{outlet signin}}
 
 				</div>
 			</div>
 		</nav>
 
-		{{outlet}}
+		<div class="container-fluid">
+			{{outlet chat}}
+			{{outlet}}
+		</div>
+
+		{{outlet signin}}
 	</script>
 
 	<script type="text/x-handlebars" id="signin-form">
-		<form class="simple-form navbar-form navbar-right" data-action="join">
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="Enter your name">
+		<div class="signin-modal modal fade in" style="display:block;">
+			<div class="modal-backdrop fade in"></div>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Welcome to the Strayegg Britannia server</h4>
+					</div>
+					<div class="modal-body">
+						<p>
+							Before you join this server please tell me who you are
+						</p>
+					</div>
+					<div class="modal-footer">
+						<form class="simple-form" data-action="join">
+							<div class="input-group">
+								<div class="input-group-addon">
+									Please enter your name
+								</div>
+								<input type="text" class="form-control">
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-primary">Connect</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
-			<button type="submit" class="btn btn-default">Connect</button>
-		</form>
-	</script>
-
-	<script type="text/x-handlebars" id="signin-welcome">
-		<p class="navbar-text navbar-right">
-			Connected as <strong>{{App.User.name}}</strong>
-		</p>
-	</script>
-
-	<script type="text/x-handlebars" id="index">
-
-		<div class="container welcome">
-			<h1>
-				Britannia
-			</h1>
-			<p class="lead">
-				Built using Ember, Node, Bootstrap and Socket.io
-			</p>
 		</div>
+	</script>
 
+
+	<script type="text/x-handlebars" id="chat">
+		<div class="col-xs-3 chat-frame">
+			<form class="chat-form simple-form" data-action="messages">
+				<div class="input-group">
+					<input type="text" class="form-control">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button">Send</button>
+					</span>
+				</div>
+			</form>
+			<ul class="chat-output">
+				{{#each App.CHAT}}
+					<li>
+						<strong>{{nickname}}:</strong> {{message}}
+					</li>
+				{{/each}}
+			</ul>
+		</div>
 	</script>
 
 	<script type="text/x-handlebars" id="game">
-		<div class="container-fluid game-board">
-			<div class="col-xs-3 chat-frame">
-				<form class="chat-form simple-form" data-action="chat">
-					<div class="input-group">
-						<input type="text" class="form-control">
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button">Send</button>
-						</span>
-					</div>
-				</form>
-				<ul class="chat-output">
-					{{#each chat}}
-						<li>
-							<strong>{{nickname}}:</strong> {{message}}
-						</li>
-					{{/each}}
-				</ul>
-			</div>
-			<div class="col-xs-9 col-xs-offset-3 main-frame">
-				<h1>Current game board</h1>
-				<p>Board goes here</p>
-			</div>
+		<div class="col-xs-9 col-xs-offset-3 main-frame">
+			<h1>Current game board</h1>
+			<p>Board goes here</p>
 		</div>
-
 	</script>
 
 	<script type="text/javascript" src="/libs.js"></script>
