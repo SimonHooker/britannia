@@ -13,6 +13,9 @@ app.use('/tests',express.static(__dirname+'/tests'));
 app.get('/',function(req, res){
 	res.sendfile('./index.html');
 });
+app.get('/favicon.ico',function(req, res){
+	res.sendfile('./favicon.ico');
+});
 
 app.get('/britannia.css',function(req,res){
 	res.sendfile('./css/britannia.css');
