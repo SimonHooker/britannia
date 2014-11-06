@@ -7,6 +7,7 @@ var io = require('socket.io')(server);
 app.use(express.compress());
 app.use(lessMiddleware(__dirname+'/css'));
 app.use('/fonts',express.static(__dirname+'/fonts'));
+app.use('/images',express.static(__dirname+'/images'));
 app.use('/tests',express.static(__dirname+'/tests'));
 
 app.get('/',function(req, res){
