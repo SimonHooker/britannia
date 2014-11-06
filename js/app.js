@@ -132,7 +132,6 @@ App.REGIONS = [
 			fill: '#66AA66'
 		}
 	}
-
 ];
 
 App.BOARD = {
