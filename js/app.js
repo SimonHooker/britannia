@@ -19,7 +19,9 @@ App.REGIONS = [
 			y: 540
 		},
 		area: {
-			path: 'M545,397L507,410L486,401L425,410L378,518L395,583L426,598L535,620L580,535L573,504L548,502L549,481L533,463L502,482L479,482L510,449L494,441L520,427L542,414L548,402Z',
+			paths: [
+				'M545,397L507,410L486,401L425,410L378,518L395,583L426,598L535,620L580,535L573,504L548,502L549,481L533,463L502,482L479,482L510,449L494,441L520,427L542,414L548,402Z'
+			],
 			fill: '#006600'
 		}
 	},
@@ -31,7 +33,9 @@ App.REGIONS = [
 			y: 300
 		},
 		area: {
-			path: 'M422,406L489,395L495,399L524,394L530,375L607,315L621,292L649,278L649,231L612,211L605,223L481,240L473,227L416,206L385,265L387,289L356,298L362,325L345,332L347,343L362,371Z',
+			paths: [
+				'M422,406L489,395L495,399L524,394L530,375L607,315L621,292L649,278L649,231L612,211L605,223L481,240L473,227L416,206L385,265L387,289L356,298L362,325L345,332L347,343L362,371Z'
+			],
 			fill: '#006600'
 		}
 	},
@@ -43,7 +47,25 @@ App.REGIONS = [
 			y: 563,
 		},
 		area: {
-			path: 'M419,415L373,511L373,522L391,584L396,590L423,599L414,684L327,685L351,636L290,705L259,687L249,651L221,646L240,624L265,621L274,596L259,593L278,547L300,520L296,503L285,450L297,388L349,371Z',
+			paths: [
+				'M419,415L373,511L373,522L391,584L396,590L423,599L414,684L327,685L351,636L290,705L259,687L249,651L221,646L240,624L265,621L274,596L259,593L278,547L300,520L296,503L285,450L297,388L349,371Z',
+				'M207,602L212,568L185,559L183,581Z',
+				'M290,714L277,736L260,741L257,724L222,743L194,748L184,724L218,723L223,700L198,688L204,669L225,663L245,678L250,694Z'
+			],
+			fill: '#006600'
+		}
+	},
+	{
+		id: 'orkneys',
+		name: {
+			text: 'Orkneys',
+			x: 630,
+			y: 118
+		},
+		area: {
+			paths: [
+				'M618,103L610,151L650,160L650,178L664,192L677,170L694,150L678,135L697,112L715,118L711,101L720,79L722,66L696,81L670,78L657,58L648,64L648,80L629,96L630,104Z'
+			],
 			fill: '#006600'
 		}
 	}
@@ -88,17 +110,28 @@ App.GameRoute = Ember.Route.extend({
 				typeof model.board.paper === 'undefined'
 			) {
 				model.board.paper = Raphael('raphael-game-board',1370,2274);
-				$.each(model.board.regions,function(){
-					this.area.o = model.board.paper.path(
-						this.area.path
-					).attr({
-						fill: this.area.fill,
+				$.each(model.board.regions,function(i,region){
+
+					region.area.o = model.board.paper.set();
+
+					$.each( this.area.paths , function(j,path){
+						region.area.o.push(
+							model.board.paper.path(
+								path
+							)
+						);
+					});
+
+					region.area.o.attr({
+						fill: region.area.fill,
 						opacity: 0.8
 					});
-					this.name.o = model.board.paper.text( 
-						this.name.x, 
-						this.name.y, 
-						this.name.text 
+
+
+					region.name.o = model.board.paper.text( 
+						region.name.x, 
+						region.name.y, 
+						region.name.text 
 					).attr({
 						'text-anchor': 'start',
 						'fill': '#FFFFFF',
