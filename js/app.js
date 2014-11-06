@@ -7,6 +7,9 @@ App.Router.map(function() {
 
 App.CHAT = [];
 
+var mapDebugMode = ( window.location.search.substring(1) == 'mapdebug' );
+
+
 App.REGIONS = [
 	{
 		id: 'moray',
@@ -19,7 +22,32 @@ App.REGIONS = [
 			path: 'M545,397L507,410L486,401L425,410L378,518L395,583L426,598L535,620L580,535L573,504L548,502L549,481L533,463L502,482L479,482L510,449L494,441L520,427L542,414L548,402Z',
 			fill: '#006600'
 		}
+	},
+	{
+		id: 'caithness',
+		name: {
+			text: 'Caithness',
+			x: 440,
+			y: 300
+		},
+		area: {
+			path: 'M422,406L489,395L495,399L524,394L530,375L607,315L621,292L649,278L649,231L612,211L605,223L481,240L473,227L416,206L385,265L387,289L356,298L362,325L345,332L347,343L362,371Z',
+			fill: '#006600'
+		}
+	},
+	{
+		id: 'moray',
+		name: {
+			text: 'Skye',
+			x: 307,
+			y: 563,
+		},
+		area: {
+			path: 'M419,415L373,511L373,522L391,584L396,590L423,599L414,684L327,685L351,636L290,705L259,687L249,651L221,646L240,624L265,621L274,596L259,593L278,547L300,520L296,503L285,450L297,388L349,371Z',
+			fill: '#006600'
+		}
 	}
+
 ];
 
 App.BOARD = {
@@ -36,12 +64,12 @@ App.GAME = {
 App.ApplicationRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
 		this._super();
-/*
-		this.render( 'signin-form' , {
-			into: 'application',
-			outlet: 'signin'
-		});
-*/
+		if (!mapDebugMode) {
+			this.render( 'signin-form' , {
+				into: 'application',
+				outlet: 'signin'
+			});
+		}
 		this.render( 'chat' , {
 			into: 'application',
 			outlet: 'chat'
@@ -73,7 +101,7 @@ App.GameRoute = Ember.Route.extend({
 						this.name.text 
 					).attr({
 						'text-anchor': 'start',
-						'stroke': '#FFFFFF',
+						'fill': '#FFFFFF',
 						'font-size': '20px'
 					});
 				});
@@ -100,7 +128,9 @@ App.GameRoute = Ember.Route.extend({
 						return s;
 					};
 
-					$('#raphael-game-board').on('click',function(e){
+					$('#raphael-game-board').css({
+						'background-image': "url('/images/map_1370.jpg')"
+					}).on('click',function(e){
 
 						console.log(e);
 						posx = Math.round(e.pageX - $(this).offset().left);
@@ -120,7 +150,9 @@ App.GameRoute = Ember.Route.extend({
 						});
 					});
 				};
-				insertDebugCoords();
+				if (mapDebugMode) {
+					insertDebugCoords();
+				}
 
 			}
 		});
