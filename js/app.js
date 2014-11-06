@@ -144,7 +144,6 @@ App.GAME = {
 	board: App.BOARD
 };
 
-
 App.ApplicationRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
 		this._super();
