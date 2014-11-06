@@ -7,9 +7,55 @@ App.Router.map(function() {
 
 App.CHAT = [];
 
-App.GAME = {
-	chat: App.CHAT
+App.REGIONS = [
+	{
+		id: 'region1',
+		name: {
+			text: 'Region One',
+			x: 110,
+			y: 110
+		},
+		area: {
+			path: 'M100,100L200,100L200,200L100,200Z',
+			fill: '#AAAA00'
+		}
+	},
+	{
+		id: 'region2',
+		name: {
+			text: 'Region Two',
+			x: 310,
+			y: 310
+		},
+		area: {
+			path: 'M300,300L400,300L400,400L300,400Z',
+			fill: '#AAAA00'
+		}
+	},
+	{
+		id: 'region3',
+		name: {
+			text: 'Region Three',
+			x: 110,
+			y: 310
+		},
+		area: {
+			path: 'M100,300L200,300L200,400L100,400Z',
+			fill: '#AAAA00'
+		}
+	}
+];
+
+App.BOARD = {
+	regions: App.REGIONS,
+	paper: undefined
 };
+
+App.GAME = {
+	chat: App.CHAT,
+	board: App.BOARD
+};
+
 
 App.ApplicationRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
@@ -29,6 +75,30 @@ App.ApplicationRoute = Ember.Route.extend({
 App.GameRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
 		this._super();
+
+		// Create the game board
+		$(function(){
+			if (
+				typeof model.board.paper === 'undefined'
+			) {
+				model.board.paper = Raphael('raphael-game-board',400,400);
+				$.each(model.board.regions,function(){
+					this.area.o = model.board.paper.path(
+						this.area.path
+					).attr({
+						fill: this.area.fill
+					});
+					this.name.o = model.board.paper.text( 
+						this.name.x, 
+						this.name.y, 
+						this.name.text 
+					).attr({
+						'text-anchor': 'start'
+					});
+				});
+			}
+		});
+
 	},
 	model: function() {
 		return App.GAME;
