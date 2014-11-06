@@ -4,6 +4,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
+app.use(express.compress());
 app.use(lessMiddleware(__dirname+'/css'));
 app.use('/fonts',express.static(__dirname+'/fonts'));
 app.use('/tests',express.static(__dirname+'/tests'));
