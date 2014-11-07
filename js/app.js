@@ -284,7 +284,9 @@ App.REGIONS = [
 		},
 		area: {
 			paths: [
-				/* hwicce-smercia */ 'M788,1873L789,1831L785,1812L792,1802L800,1786'+
+				/* smercia-essex */ 'M955,1825L956,1832L959,1837L963,1846L963,1857L962,1864L963,1876L963,1884L961,1890L958,1895L956,1903L956,1912L953,1916L947,1920L938,1924L928,1936'+
+				/* downlands-smercia */ 'L928,1936L926,1933L921,1926L912,1922L898,1919L888,1921L882,1918L875,1915L857,1915L840,1914L835,1910L836,1899L832,1888L820,1880L803,1880L795,1876L789,1873'+
+				/* hwicce-smercia */ 'L788,1873L789,1831L785,1812L792,1802L800,1786'+
 				/* nmercia-smercia */ 'L800,1786L802,1780L812,1775L820,1762L826,1750L836,1748L842,1743L848,1746L860,1745L869,1744L881,1741L894,1730L911,1721L924,1723L931,1720L935,1714L941,1715'+
 				/* smercia-suffolk */ 'L941,1715L940,1731L938,1740L943,1754L944,1758L937,1779L938,1798L949,1808L955,1825'+
 				'Z'
@@ -302,7 +304,8 @@ App.REGIONS = [
 		},
 		area: {
 			paths: [
-				/* smercia-suffolk */ 'M955,1825L949,1808L938,1798L937,1779L944,1758L943,1754L938,1740L940,1731L941,1715'+
+				/* essex-suffolk */ 'M1205,1787L1201,1786L1187,1787L1170,1783L1159,1783L1147,1787L1140,1778L1130,1772L1130,1765L1124,1765L1114,1765L1107,1760L1096,1758L1094,1763L1091,1767L1078,1765L1067,1760L1058,1766L1049,1771L1048,1777L1040,1784L1030,1788L1018,1790L1014,1796L1005,1799L998,1802L992,1807L986,1807L985,1815L978,1821L955,1825'+
+				/* smercia-suffolk */ 'L955,1825L949,1808L938,1798L937,1779L944,1758L943,1754L938,1740L940,1731L941,1715'+
 				/* nmercia-suffolk */ 'L941,1715L955,1714L960,1702L974,1698L978,1689'+
 				'Z'
 			],
@@ -321,9 +324,42 @@ App.REGIONS = [
 			paths: [
 				/* nmercia-hwicce */ 'M752,1660L752,1667L748,1676L761,1683L772,1687L772,1697L764,1705L759,1713L759,1722L761,1731L775,1748L790,1763L797,1776L800,1786'+
 				/* hwicce-smercia */ 'L800,1786L792,1802L785,1812L789,1831L788,1873'+
+				/* downlands-hwicce */ 'L788,1873L781,1875L777,1870L770,1873L762,1876L751,1876L747,1872L736,1871L726,1872L718,1880L714,1883'+
 				'Z'
 			],
 			fill: regionColours.lowland
+		}
+	},
+	{
+		id: 'essex',
+		name: {
+			text: 'Essex',
+			x: 1008,
+			y: 1841
+		},
+		area: {
+			paths: [
+				/* essex-suffolk */ 'M1205,1787L1201,1786L1187,1787L1170,1783L1159,1783L1147,1787L1140,1778L1130,1772L1130,1765L1124,1765L1114,1765L1107,1760L1096,1758L1094,1763L1091,1767L1078,1765L1067,1760L1058,1766L1049,1771L1048,1777L1040,1784L1030,1788L1018,1790L1014,1796L1005,1799L998,1802L992,1807L986,1807L985,1815L978,1821L955,1825'+
+				/* smercia-essex */ 'L955,1825L956,1832L959,1837L963,1846L963,1857L962,1864L963,1876L963,1884L961,1890L958,1895L956,1903L956,1912L953,1916L947,1920L938,1924L928,1936'+
+				'Z'
+			],
+			fill: regionColours.lowland
+		}
+	},
+	{
+		id: 'downlands',
+		name: {
+			text: 'Downlands',
+			x: 769,
+			y: 1930
+		},
+		area: {
+			paths: [
+				/* downlands-hwicce */ 'M714,1883L718,1880L726,1872L736,1871L747,1872L751,1876L762,1876L770,1873L777,1870L781,1875L788,1873'+
+				/* downlands-smercia */ 'L788,1873L795,1876L803,1880L820,1880L832,1888L836,1899L835,1910L840,1914L857,1915L875,1915L882,1918L888,1921L898,1919L912,1922L921,1926L926,1933L928,1936Z'+
+				'Z'
+			],
+			fill: regionColours.highland
 		}
 	}
 ];
@@ -379,7 +415,7 @@ App.GameRoute = Ember.Route.extend({
 
 					region.area.o.attr({
 						fill: region.area.fill,
-						opacity: 0.8
+						opacity: mapDebugMode?0.8:1
 					});
 
 
@@ -395,56 +431,56 @@ App.GameRoute = Ember.Route.extend({
 				});
 
 
-				var insertDebugCoords = function() {
-					var arrTemp = [];
-					var pathTemp = undefined;
-
-					var echoForm = $('<div>&nbsp;</div>');
-					echoForm.insertBefore($('#raphael-game-board'));
-
-					$('<button class="btn btn-danger">RESET</button>').on('click',function(e){
-						e.preventDefault();
-						arrTemp = [];
-						if (pathTemp) {
-							pathTemp.remove();
-						}
-					}).insertBefore($('#raphael-game-board'));
-
-					var getPathFrom = function(arr) {
-						return 'M'+arr.join('L')+'Z';
-					};
-
-					$('#raphael-game-board').css({
-						'background-image': "url('/images/map_1370.jpg')"
-					}).on('click',function(e){
-
-						console.log(e);
-						posx = Math.round(e.pageX - $(this).offset().left);
-						posy = Math.round(e.pageY - $(this).offset().top);
-
-						arrTemp.push(posx+','+posy);
-
-						if (pathTemp) {
-							pathTemp.remove();
-						}
-
-						var s = getPathFrom( arrTemp );
-						arrTemp.reverse();
-						var s2 = getPathFrom( arrTemp );
-						arrTemp.reverse();
-
-
-						echoForm.html(s+'<br>'+s2);
-
-						pathTemp = model.board.paper.path(
-							getPathFrom( arrTemp )
-						).attr({
-							fill: '#FF0000',
-							opacity: 0.5
-						});
-					});
-				};
 				if (mapDebugMode) {
+					var insertDebugCoords = function() {
+						var arrTemp = [];
+						var pathTemp = undefined;
+
+						var echoForm = $('<div>&nbsp;</div>');
+						echoForm.insertBefore($('#raphael-game-board'));
+
+						$('<button class="btn btn-danger">RESET</button>').on('click',function(e){
+							e.preventDefault();
+							arrTemp = [];
+							if (pathTemp) {
+								pathTemp.remove();
+							}
+						}).insertBefore($('#raphael-game-board'));
+
+						var getPathFrom = function(arr) {
+							return 'M'+arr.join('L')+'Z';
+						};
+
+						$('#raphael-game-board').css({
+							'background-image': "url('/images/map_1370.jpg')"
+						}).on('click',function(e){
+
+							console.log(e);
+							posx = Math.round(e.pageX - $(this).offset().left);
+							posy = Math.round(e.pageY - $(this).offset().top);
+
+							arrTemp.push(posx+','+posy);
+
+							if (pathTemp) {
+								pathTemp.remove();
+							}
+
+							var s = getPathFrom( arrTemp );
+							arrTemp.reverse();
+							var s2 = getPathFrom( arrTemp );
+							arrTemp.reverse();
+
+
+							echoForm.html(s+'<br>'+s2);
+
+							pathTemp = model.board.paper.path(
+								getPathFrom( arrTemp )
+							).attr({
+								fill: '#FF0000',
+								opacity: 0.5
+							});
+						});
+					};
 					insertDebugCoords();
 				}
 
