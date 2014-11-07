@@ -240,6 +240,91 @@ App.REGIONS = [
 			],
 			fill: regionColours.water
 		}
+	},
+	{
+		id: 'strathclyde',
+		name: {
+			text: 'Strathclyde',
+			x: 435,
+			y: 924
+		},
+		area: {
+			paths: [
+				'M487,841L501,852L514,853L519,861L531,870L530,880L545,895L568,899L563,941L562,978L553,979L545,1004L513,984L498,978L481,983L468,1010L455,1007L427,1038L388,1059L354,1068L345,1053L354,1035L376,1006L388,981L396,967L405,952L403,930L390,915L378,905L375,891L380,865L382,846L399,847L415,849L418,845L409,841L394,837L388,833L379,840L381,831L387,829L401,833L422,836L439,836L440,832L448,839Z'
+			],
+			fill: regionColours.lowland
+		}
+	},
+	// BELOW HERE, PATHS ARE MAPPED PER-BORDER
+	// INCOMPLETES
+	{
+		id: 'nmercia',
+		name: {
+			text: 'North\nMercia',
+			x: 822,
+			y: 1626
+		},
+		area: {
+			paths: [
+				/* nmercia-hwicce */ 'M752,1660L752,1667L748,1676L761,1683L772,1687L772,1697L764,1705L759,1713L759,1722L761,1731L775,1748L790,1763L797,1776L800,1786'+
+				/* nmercia-smercia */ 'L800,1786L802,1780L812,1775L820,1762L826,1750L836,1748L842,1743L848,1746L860,1745L869,1744L881,1741L894,1730L911,1721L924,1723L931,1720L935,1714L941,1715'+
+				/* nmercia-suffolk */ 'L941,1715L955,1714L960,1702L974,1698L978,1689'+
+				'Z'
+			],
+			fill: regionColours.lowland
+		}
+
+	},
+	{
+		id: 'smercia',
+		name: {
+			text: 'South\nMercia',
+			x: 836,
+			y: 1818
+		},
+		area: {
+			paths: [
+				/* hwicce-smercia */ 'M788,1873L789,1831L785,1812L792,1802L800,1786'+
+				/* nmercia-smercia */ 'L800,1786L802,1780L812,1775L820,1762L826,1750L836,1748L842,1743L848,1746L860,1745L869,1744L881,1741L894,1730L911,1721L924,1723L931,1720L935,1714L941,1715'+
+				/* smercia-suffolk */ 'L941,1715L940,1731L938,1740L943,1754L944,1758L937,1779L938,1798L949,1808L955,1825'+
+				'Z'
+			],
+			fill: regionColours.lowland
+		}
+
+	},
+	{
+		id: 'suffolk',
+		name: {
+			text: 'Suffolk',
+			x: 1045,
+			y: 1712
+		},
+		area: {
+			paths: [
+				/* smercia-suffolk */ 'M955,1825L949,1808L938,1798L937,1779L944,1758L943,1754L938,1740L940,1731L941,1715'+
+				/* nmercia-suffolk */ 'L941,1715L955,1714L960,1702L974,1698L978,1689'+
+				'Z'
+			],
+			fill: regionColours.lowland
+		}
+
+	},
+	{
+		id: 'hwicce',
+		name: {
+			text: 'Hwicce',
+			x: 659,
+			y: 1759
+		},
+		area: {
+			paths: [
+				/* nmercia-hwicce */ 'M752,1660L752,1667L748,1676L761,1683L772,1687L772,1697L764,1705L759,1713L759,1722L761,1731L775,1748L790,1763L797,1776L800,1786'+
+				/* hwicce-smercia */ 'L800,1786L792,1802L785,1812L789,1831L788,1873'+
+				'Z'
+			],
+			fill: regionColours.lowland
+		}
 	}
 ];
 
@@ -326,9 +411,7 @@ App.GameRoute = Ember.Route.extend({
 					}).insertBefore($('#raphael-game-board'));
 
 					var getPathFrom = function(arr) {
-						var s = 'M'+arr.join('L')+'Z';
-						echoForm.text(s);
-						return s;
+						return 'M'+arr.join('L')+'Z';
 					};
 
 					$('#raphael-game-board').css({
@@ -344,6 +427,14 @@ App.GameRoute = Ember.Route.extend({
 						if (pathTemp) {
 							pathTemp.remove();
 						}
+
+						var s = getPathFrom( arrTemp );
+						arrTemp.reverse();
+						var s2 = getPathFrom( arrTemp );
+						arrTemp.reverse();
+
+
+						echoForm.html(s+'<br>'+s2);
 
 						pathTemp = model.board.paper.path(
 							getPathFrom( arrTemp )
