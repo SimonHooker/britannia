@@ -38,11 +38,19 @@ body {
 
 .main-frame {
 	#raphael-game-board {
+	position:relative;
 		width: 1370px;
 		height: 2274px;
 		background-repeat: no-repeat;
 		svg {
 		//	background-color:#000000;
+		}
+
+		div.unit {
+			position: absolute;
+			background-color: #FF0000;
+			width: 20px;
+			height: 20px;
 		}
 	}
 }

@@ -95,8 +95,16 @@
 	<script type="text/x-handlebars" id="game">
 		<div class="col-xs-9 col-xs-offset-3 main-frame">
 			<h1>Current game board</h1>
-			<div id="raphael-game-board"></div>
+			<div id="raphael-game-board">
+				{{outlet units}}
+			</div>
 		</div>
+	</script>
+
+	<script type="text/x-handlebars" id="units">
+		{{#each App.UNITS itemController="unit"}}
+			<div class="unit" {{bind-attr style=position}}></div>
+		{{/each}}
 	</script>
 
 	<script type="text/javascript" src="/britannia.js"></script>

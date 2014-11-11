@@ -6,18 +6,50 @@ App.BOARD = {
 
 App.CHAT = [];
 
+App.UNITS = [
+	{
+		x: 100,
+		y: 100
+	},
+	{
+		x: 100,
+		y: 200
+	},
+	{
+		x: 200,
+		y: 100
+	}
+];
+
+App.UnitController = Ember.ObjectController.extend({
+	position: function() {
+		return 'top:'+this.get('y')+'px;left:'+this.get('x')+'px;';
+	}.property('x', 'y')
+});
+
+
+/*
+	$(this.element).find('div.unit').draggable({ 
+ 	containment: '#raphael-game-board', 
+ 	scroll: false 
+ });
+*/
+
 App.GAME = {
 	chat: App.CHAT,
-	board: App.BOARD
+	board: App.BOARD,
+	units: App.UNITS
 };
 
 App.ApplicationRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
 		this._super();
+		/*
 		this.render( 'signin-form' , {
 			into: 'application',
 			outlet: 'signin'
 		});
+		*/
 		this.render( 'chat' , {
 			into: 'application',
 			outlet: 'chat'
@@ -28,6 +60,11 @@ App.ApplicationRoute = Ember.Route.extend({
 App.GameRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
 		this._super();
+
+		this.render( 'units' , {
+			into: 'game',
+			outlet: 'units'
+		});
 
 		// Create the game board
 		$(function(){
