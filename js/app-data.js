@@ -856,5 +856,4 @@ App.REGIONS = [
 			stroke: regionColours.border
 		}
 	},
-
 ];
