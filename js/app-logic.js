@@ -68,26 +68,46 @@ App.GameRoute = Ember.Route.extend({
 						);
 					});
 
-					region.area.o.attr({
-						fill: region.area.fill,
-						stroke: region.area.stroke,
-						'fill-opacity': areaOpacity
-					});
+					if (
+						typeof region.area.stroke !== 'undefined'
+					) {
+						region.area.o.attr({
+							stroke: region.area.stroke ,
+							'stroke-width': ( region.area.width || 1 )
+						});
+					} else {
+						region.area.o.attr({
+							'stroke-width': 0
+						});
+					}
 
 
-					region.name.o = model.board.paper.text( 
-						region.name.x, 
-						region.name.y, 
-						region.name.text 
-					).attr({
-						'text-anchor': 'start',
-						fill: '#FFFFFF',
-						'font-size': '20px'
-					});
+					if (
+						typeof region.name !== 'undefined'
+					) {
+						region.name.o = model.board.paper.text( 
+							region.name.x, 
+							region.name.y, 
+							region.name.text 
+						).attr({
+							'text-anchor': 'start',
+							fill: '#FFFFFF',
+							'font-size': '20px'
+						});
+					}
 
-					region.area.o
-						.mouseover(areaHoverCallback(region.area.o,shadeColor(region.area.fill,0.5),(region.area.stroke==region.area.fill)?shadeColor(region.area.stroke,0.5):region.area.stroke))
-						.mouseout(areaHoverCallback(region.area.o,region.area.fill,region.area.stroke));
+					if (
+						typeof region.area.fill !== 'undefined'
+					) {
+						region.area.o.attr({
+							fill: region.area.fill,
+							'fill-opacity': areaOpacity
+						});
+
+						region.area.o
+							.mouseover(areaHoverCallback(region.area.o,shadeColor(region.area.fill,0.5),(region.area.stroke==region.area.fill)?shadeColor(region.area.stroke,0.5):region.area.stroke))
+							.mouseout(areaHoverCallback(region.area.o,region.area.fill,region.area.stroke));
+					}
 				});
 
 

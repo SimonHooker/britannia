@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 					src: [
 						'js/_bower.js',
 						'js/app-init.js',
-						'js/app-data.js',
+						'js/data/*.js',
 						'js/app-logic.js'
 					],
 					dest: 'js/britannia.js'
