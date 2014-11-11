@@ -14,10 +14,33 @@ module.exports = function(grunt) {
 					relative: false
 				}
 			}
+		},
+
+		concat: {
+				js: {
+					src: [
+						'js/_bower.js',
+						'js/app-init.js',
+						'js/app-data.js',
+						'js/app-logic.js'
+					],
+					dest: 'js/britannia.js'
+				}
+		},
+		watch: {
+			scripts: {
+				files: ['js/*.js'],
+				tasks: 'js'
+			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-bower-concat');
-	grunt.registerTask('default', ['bower_concat']);
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+
+	grunt.registerTask('js', ['bower_concat','concat:js']);
+
+	grunt.registerTask('default', ['js']);
 
 };

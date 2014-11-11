@@ -21,12 +21,8 @@ app.get('/britannia.css',function(req,res){
 	res.sendfile('./css/britannia.css');
 });
 
-app.get('/libs.js',function(req,res){
-	res.sendfile('./js/_bower.js');
-});
-
-app.get('/app.js',function(req,res){
-	res.sendfile('./js/app.js');
+app.get('/britannia.js',function(req,res){
+	res.sendfile('./js/britannia.js');
 });
 
 io.on('connection',function(client){

@@ -1,14 +1,3 @@
-var App = Ember.Application.create();
-var socket = io.connect('http://'+window.location.hostname+':80');
-
-App.Router.map(function() {
-	this.resource('game',{ path: '/' });
-});
-
-App.CHAT = [];
-
-var mapDebugMode = ( window.location.search.substring(1) == 'mapdebug' );
-
 
 var regionColours = {
 	highland: '#006600',
@@ -714,6 +703,26 @@ App.REGIONS = [
 			stroke: regionColours.border
 		}
 	},
+	{
+		id: 'pennines',
+		name: {
+			text: 'Pennines',
+			x: 707,
+			y: 1325
+		},
+		area: {
+			paths: [
+				/* pennines-york */ 'M762,1427L767,1424L773,1421L780,1425L788,1427L797,1425L800,1420L803,1415L816,1413L820,1410L823,1404L826,1402L826,1394L815,1384L815,1370L809,1362L805,1351L798,1336L793,1299'+
+				/* pennines-bernicia */ 'L793,1299L788,1281L781,1263L778,1249L782,1235L783,1215L780,1207L779,1194L781,1182L772,1169L768,1156L760,1146L756,1137L758,1129L753,1118L750,1112'+
+				/* pennines-lothian */ 'L750,1112L744,1113L732,1125L726,1135L711,1140L696,1140L681,1145'+
+				/* pennines-cumbria */ 'L681,1145L687,1160L685,1167L696,1181L700,1205L699,1222L702,1235L695,1258L699,1276L701,1285L706,1291L694,1301L693,1304L683,1309L684,1315L694,1327L701,1337L704,1345L699,1351L692,1355L689,1368'+
+				/* cheshire-pennines */ 'L689,1368L695,1381L697,1394L706,1398L718,1400L728,1401L731,1404L732,1408L738,1408L750,1407L758,1413L760,1424L762,1427'+
+				'Z'
+			],
+			fill: regionColours.highland,
+			stroke: regionColours.border
+		}
+	},
 
 // INCOMPLETES
 	{
@@ -730,6 +739,8 @@ App.REGIONS = [
 				/* york-nmercia */ 'L926,1463L903,1462L898,1465L894,1463L870,1463L865,1471L854,1482L849,1482L836,1481L830,1488L815,1495L803,1497L799,1513L783,1525'+
 				/* york-march */ 'L783,1525L779,1519L774,1502L771,1491L756,1490'+
 				/* cheshire-york */ 'L756,1490L761,1477L761,1470L757,1463L759,1437L762,1427'+
+				/* pennines-york */ 'L762,1427L767,1424L773,1421L780,1425L788,1427L797,1425L800,1420L803,1415L816,1413L820,1410L823,1404L826,1402L826,1394L815,1384L815,1370L809,1362L805,1351L798,1336L793,1299'+
+				/* york-bernicia */ 'L793,1299L797,1298L814,1284L834,1284L837,1281L860,1281L863,1289L869,1293L884,1290L901,1293L903,1281L911,1277L922,1277L930,1271L954,1266L988,1250'+
 				'Z'
 			],
 			fill: regionColours.lowland,
@@ -745,7 +756,9 @@ App.REGIONS = [
 		},
 		area: {
 			paths: [
-				/* cheshire-york */ 'M762,1427L759,1437L757,1463L761,1470L761,1477L756,1490'+
+				/* cumbria-cheshire */ 'M633,1369L645,1364L656,1367L665,1366L671,1364L679,1367L689,1368'+
+				/* cheshire-pennines */ 'L689,1368L695,1381L697,1394L706,1398L718,1400L728,1401L731,1404L732,1408L738,1408L750,1407L758,1413L760,1424L762,1427'+
+				/* cheshire-york */ 'L762,1427L759,1437L757,1463L761,1470L761,1477L756,1490'+
 				/* cheshire-march */ 'L756,1490L749,1495L743,1497L734,1497L726,1507L719,1515L706,1523L700,1533L691,1541L670,1545L664,1542L665,1537L652,1538L649,1545L649,1552L637,1552L633,1554L624,1551L621,1547L608,1544'+
 				/* clwyd-cheshire */ 'L608,1544L608,1538L612,1531L619,1520L620,1506L617,1486'+
 				/* atlantic-cheshire */ 'L617,1486L615,1479L610,1476L601,1463L594,1458L591,1450L598,1447L609,1449L619,1452L624,1467L631,1473L641,1472L651,1467L647,1465L632,1462L628,1458L621,1443L615,1442L611,1434L610,1421L610,1409L608,1403L611,1397'+
@@ -754,201 +767,75 @@ App.REGIONS = [
 			fill: regionColours.lowland,
 			stroke: regionColours.border
 		}
+	},
+	{
+		id: 'galloway',
+		name: {
+			text: 'Galloway',
+			x: 454,
+			y: 1046
+		},
+		area: {
+			paths: [
+				'Z'
+			],
+			fill: regionColours.highland,
+			stroke: regionColours.border
+		}
+	},
+	{
+		id: 'lothian',
+		name: {
+			text: 'Lothian',
+			x: 690,
+			y: 980
+		},
+		area: {
+			paths: [
+				/* lothian-bernicia */ 'M849,1068L846,1070L836,1073L833,1076L825,1076L814,1073L805,1076L801,1083L792,1096L786,1100L773,1098L765,1102L750,1112'+
+				/* pennines-lothian */ 'L750,1112L744,1113L732,1125L726,1135L711,1140L696,1140L681,1145'+
+				/* lothian-cumbria */ 'L681,1145L673,1141L672,1138L680,1130L681,1127L676,1122L675,1116L671,1110L664,1110L660,1106L661,1101L654,1100L648,1097L648,1091L651,1079L651,1078'+
+				'Z'
+			],
+			fill: regionColours.lowland,
+			stroke: regionColours.border
+		}
+	},
+	{
+		id: 'cumbria',
+		name: {
+			text: 'Cumbria',
+			x: 597,
+			y: 1196
+		},
+		area: {
+			paths: [
+				/* lothian-cumbria */ 'M651,1078L651,1079L648,1091L648,1097L654,1100L661,1101L660,1106L664,1110L671,1110L675,1116L676,1122L681,1127L680,1130L672,1138L673,1141L681,1145'+
+				/* pennines-cumbria */ 'L681,1145L687,1160L685,1167L696,1181L700,1205L699,1222L702,1235L695,1258L699,1276L701,1285L706,1291L694,1301L693,1304L683,1309L684,1315L694,1327L701,1337L704,1345L699,1351L692,1355L689,1368'+
+				/* cumbria-cheshire */ 'L689,1368L679,1367L671,1364L665,1366L656,1367L645,1364L633,1369'+
+				'Z'
+			],
+			fill: regionColours.lowland,
+			stroke: regionColours.border
+		}
+	},
+	{
+		id: 'bernicia',
+		name: {
+			text: 'Bernicia',
+			x: 811,
+			y: 1182
+		},
+		area: {
+			paths: [
+				/* york-bernicia */ 'M988,1250L954,1266L930,1271L922,1277L911,1277L903,1281L901,1293L884,1290L869,1293L863,1289L860,1281L837,1281L834,1284L814,1284L797,1298L793,1299'+
+				/* pennines-bernicia */ 'L793,1299L788,1281L781,1263L778,1249L782,1235L783,1215L780,1207L779,1194L781,1182L772,1169L768,1156L760,1146L756,1137L758,1129L753,1118L750,1112'+
+				/* bernicia-lothian */ 'L750,1112L765,1102L773,1098L786,1100L792,1096L801,1083L805,1076L814,1073L825,1076L833,1076L836,1073L846,1070L849,1068'+
+				'Z'
+			],
+			fill: regionColours.lowland,
+			stroke: regionColours.border
+		}
 	}
 
 ];
-
-App.BOARD = {
-	regions: App.REGIONS,
-	paper: undefined,
-	regionareas: undefined
-};
-
-App.GAME = {
-	chat: App.CHAT,
-	board: App.BOARD
-};
-
-App.ApplicationRoute = Ember.Route.extend({
-	renderTemplate: function(controller,model) {
-		this._super();
-		if (!mapDebugMode) {
-			this.render( 'signin-form' , {
-				into: 'application',
-				outlet: 'signin'
-			});
-		}
-		this.render( 'chat' , {
-			into: 'application',
-			outlet: 'chat'
-		});
-	}
-});
-
-
-App.GameRoute = Ember.Route.extend({
-	renderTemplate: function(controller,model) {
-		this._super();
-
-		// Create the game board
-		$(function(){
-			if (
-				typeof model.board.paper === 'undefined'
-			) {
-				model.board.paper = Raphael('raphael-game-board',1370,2274);
-
-				model.board.regionareas = model.board.paper.set();
-
-
-				var areaOpacity = mapDebugMode?0.5:1;
-
-				var areaHoverOverCallback = function(areaSet) {
-					return function() {
-						areaSet.attr({
-							'fill-opacity': areaOpacity/2
-						});
-					};
-				};
-				var areaHoverOutCallback = function(areaSet) {
-					return function() {
-						areaSet.attr({
-							'fill-opacity': areaOpacity
-						});
-					};
-				};
-
-
-				$.each(model.board.regions,function(i,region){
-
-					region.area.o = model.board.paper.set();
-
-					$.each( this.area.paths , function(j,path){
-						region.area.o.push(
-							model.board.paper.path(
-								path
-							)
-						);
-					});
-
-					region.area.o.attr({
-						fill: region.area.fill,
-						stroke: region.area.stroke,
-						'fill-opacity': mapDebugMode?0.5:1
-					});
-
-
-					region.name.o = model.board.paper.text( 
-						region.name.x, 
-						region.name.y, 
-						region.name.text 
-					).attr({
-						'text-anchor': 'start',
-						'fill': '#FFFFFF',
-						'font-size': '20px'
-					});
-
-					region.area.o
-						.mouseover(areaHoverOverCallback(region.area.o))
-						.mouseout(areaHoverOutCallback(region.area.o));
-				});
-
-
-
-				if (mapDebugMode) {
-					var insertDebugCoords = function() {
-						var arrTemp = [];
-						var pathTemp = undefined;
-
-						var echoForm = $('<div>&nbsp;</div>');
-						echoForm.insertBefore($('#raphael-game-board'));
-
-						$('<button class="btn btn-danger">RESET</button>').on('click',function(e){
-							e.preventDefault();
-							arrTemp = [];
-							if (pathTemp) {
-								pathTemp.remove();
-							}
-						}).insertBefore($('#raphael-game-board'));
-
-						var getPathFrom = function(arr) {
-							return 'M'+arr.join('L')+'Z';
-						};
-
-						$('#raphael-game-board').css({
-							'background-image': "url('/images/map_1370.jpg')"
-						}).on('click',function(e){
-
-							console.log(e);
-							posx = Math.round(e.pageX - $(this).offset().left);
-							posy = Math.round(e.pageY - $(this).offset().top);
-
-							arrTemp.push(posx+','+posy);
-
-							if (pathTemp) {
-								pathTemp.remove();
-							}
-
-							var s = getPathFrom( arrTemp );
-							arrTemp.reverse();
-							var s2 = getPathFrom( arrTemp );
-							arrTemp.reverse();
-
-
-							echoForm.html(s+'<br>'+s2);
-
-							pathTemp = model.board.paper.path(
-								getPathFrom( arrTemp )
-							).attr({
-								fill: '#FF0000',
-								opacity: 0.5
-							});
-						});
-					};
-					insertDebugCoords();
-				}
-
-			}
-		});
-
-	},
-	model: function() {
-		return App.GAME;
-	}
-});
-
-
-socket.on('connect',function(data){});
-
-socket.on('messages',function(data){
-	App.CHAT.unshiftObject(data);
-});
-
-socket.on('signedin',function(data){
-	$('div.signin-modal').remove();
-});
-
-$(function(){
-
-	$('body')
-		.on('submit','form.simple-form',function(e){
-			e.preventDefault();
-			var form = $(this);
-			var action = form.data('action') || '';
-			if (
-				action.length > 0
-			) {
-				var input = form.find('input');
-				var message = input.val();
-				if (message.length > 0) {
-					input.val('');
-					socket.emit( action , message );
-				}
-			}
-		})
-		.on('click','form.simple-form button',function(e){
-			e.preventDefault();
-			$(this).closest('form').trigger('submit');
-		});
-		
-
-});
