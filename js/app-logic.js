@@ -47,21 +47,14 @@ App.GameRoute = Ember.Route.extend({
 
 				var areaOpacity = mapDebugMode?0.5:1;
 
-				var areaHoverOverCallback = function(areaSet) {
+				var areaHoverCallback = function(areaSet,fill,stroke) {
 					return function() {
 						areaSet.attr({
-							'fill-opacity': areaOpacity/2
+							fill: fill,
+							stroke: stroke
 						});
 					};
 				};
-				var areaHoverOutCallback = function(areaSet) {
-					return function() {
-						areaSet.attr({
-							'fill-opacity': areaOpacity
-						});
-					};
-				};
-
 
 				$.each(model.board.regions,function(i,region){
 
@@ -78,7 +71,7 @@ App.GameRoute = Ember.Route.extend({
 					region.area.o.attr({
 						fill: region.area.fill,
 						stroke: region.area.stroke,
-						'fill-opacity': mapDebugMode?0.5:1
+						'fill-opacity': areaOpacity
 					});
 
 
@@ -88,13 +81,13 @@ App.GameRoute = Ember.Route.extend({
 						region.name.text 
 					).attr({
 						'text-anchor': 'start',
-						'fill': '#FFFFFF',
+						fill: '#FFFFFF',
 						'font-size': '20px'
 					});
 
 					region.area.o
-						.mouseover(areaHoverOverCallback(region.area.o))
-						.mouseout(areaHoverOutCallback(region.area.o));
+						.mouseover(areaHoverCallback(region.area.o,shadeColor(region.area.fill,0.5),(region.area.stroke==region.area.fill)?shadeColor(region.area.stroke,0.5):region.area.stroke))
+						.mouseout(areaHoverCallback(region.area.o,region.area.fill,region.area.stroke));
 				});
 
 
