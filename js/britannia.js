@@ -94819,6 +94819,8 @@ App.Router.map(function() {
 	this.resource('game',{ path: '/' });
 });
 
+var autologin = ( window.location.search.substring(1) == 'autologin' );
+
 var shadeColor = function(color, percent) {   
 	var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
 	return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
@@ -95829,34 +95831,7 @@ App.BOARD = {
 
 App.CHAT = [];
 
-App.UNITS = [
-	{
-		x: 100,
-		y: 100
-	},
-	{
-		x: 100,
-		y: 200
-	},
-	{
-		x: 200,
-		y: 100
-	}
-];
-
-App.UnitController = Ember.ObjectController.extend({
-	position: function() {
-		return 'top:'+this.get('y')+'px;left:'+this.get('x')+'px;';
-	}.property('x', 'y')
-});
-
-
-/*
-	$(this.element).find('div.unit').draggable({ 
- 	containment: '#raphael-game-board', 
- 	scroll: false 
- });
-*/
+App.UNITS = [];
 
 App.GAME = {
 	chat: App.CHAT,
@@ -95867,12 +95842,14 @@ App.GAME = {
 App.ApplicationRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
 		this._super();
-		/*
-		this.render( 'signin-form' , {
-			into: 'application',
-			outlet: 'signin'
-		});
-		*/
+		
+		if (!autologin) {
+			this.render( 'signin-form' , {
+				into: 'application',
+				outlet: 'signin'
+			});
+		}
+
 		this.render( 'chat' , {
 			into: 'application',
 			outlet: 'chat'
@@ -95884,81 +95861,11 @@ App.GameRoute = Ember.Route.extend({
 	renderTemplate: function(controller,model) {
 		this._super();
 
-		this.render( 'units' , {
-			into: 'game',
-			outlet: 'units'
-		});
-
 		// Create the game board
 		$(function(){
 			if (
 				typeof model.board.paper === 'undefined'
 			) {
-				model.board.paper = Raphael('raphael-game-board',1370,2274);
-
-				model.board.regionareas = model.board.paper.set();
-
-				var areaHoverCallback = function(areaSet,fill,stroke) {
-					return function() {
-						areaSet.attr({
-							fill: fill,
-							stroke: stroke
-						});
-					};
-				};
-
-				$.each(model.board.regions,function(i,region){
-
-					region.area.o = model.board.paper.set();
-
-					$.each( this.area.paths , function(j,path){
-						region.area.o.push(
-							model.board.paper.path(
-								path
-							)
-						);
-					});
-
-					if (
-						typeof region.area.stroke !== 'undefined'
-					) {
-						region.area.o.attr({
-							stroke: region.area.stroke ,
-							'stroke-width': ( region.area.width || 1 )
-						});
-					} else {
-						region.area.o.attr({
-							'stroke-width': 0
-						});
-					}
-
-
-					if (
-						typeof region.name !== 'undefined'
-					) {
-						region.name.o = model.board.paper.text( 
-							region.name.x, 
-							region.name.y, 
-							region.name.text 
-						).attr({
-							'text-anchor': 'start',
-							fill: '#FFFFFF',
-							'font-size': '20px'
-						});
-					}
-
-					if (
-						typeof region.area.fill !== 'undefined'
-					) {
-						region.area.o.attr({
-							fill: region.area.fill
-						});
-
-						region.area.o
-							.mouseover(areaHoverCallback(region.area.o,shadeColor(region.area.fill,0.5),(region.area.stroke==region.area.fill)?shadeColor(region.area.stroke,0.5):region.area.stroke))
-							.mouseout(areaHoverCallback(region.area.o,region.area.fill,region.area.stroke));
-					}
-				});
 			}
 		});
 
@@ -95979,8 +95886,24 @@ socket.on('signedin',function(data){
 	$('div.signin-modal').remove();
 });
 
-$(function(){
+socket.on('spawn',function(data){
+	var frame = $('#raphael-game-board');
 
+	$.each(data,function(i,unit) {
+		var el = $('<div class="unit"></div>')
+		el.css({
+			top: unit.y+'px',
+			left: unit.x+'px'
+		});
+		frame.append(el);
+		el.draggable({
+			containment: '#raphael-game-board'
+		});
+	});
+});
+
+
+$(function(){
 	$('body')
 		.on('submit','form.simple-form',function(e){
 			e.preventDefault();
@@ -96001,6 +95924,78 @@ $(function(){
 			e.preventDefault();
 			$(this).closest('form').trigger('submit');
 		});
-		
+
+	// Render game board
+		var model = App.GAME;
+
+		model.board.paper = Raphael('raphael-game-board',1370,2274);
+
+		model.board.regionareas = model.board.paper.set();
+
+		var areaHoverCallback = function(areaSet,fill,stroke) {
+			return function() {
+				areaSet.attr({
+					fill: fill,
+					stroke: stroke
+				});
+			};
+		};
+
+		$.each(model.board.regions,function(i,region){
+
+			region.area.o = model.board.paper.set();
+
+			$.each( this.area.paths , function(j,path){
+				region.area.o.push(
+					model.board.paper.path(
+						path
+					)
+				);
+			});
+
+			if (
+				typeof region.area.stroke !== 'undefined'
+			) {
+				region.area.o.attr({
+					stroke: region.area.stroke ,
+					'stroke-width': ( region.area.width || 1 )
+				});
+			} else {
+				region.area.o.attr({
+					'stroke-width': 0
+				});
+			}
+
+
+			if (
+				typeof region.name !== 'undefined'
+			) {
+				region.name.o = model.board.paper.text( 
+					region.name.x, 
+					region.name.y, 
+					region.name.text 
+				).attr({
+					'text-anchor': 'start',
+					fill: '#FFFFFF',
+					'font-size': '20px'
+				});
+			}
+
+			if (
+				typeof region.area.fill !== 'undefined'
+			) {
+				region.area.o.attr({
+					fill: region.area.fill
+				});
+
+				region.area.o
+					.mouseover(areaHoverCallback(region.area.o,shadeColor(region.area.fill,0.5),(region.area.stroke==region.area.fill)?shadeColor(region.area.stroke,0.5):region.area.stroke))
+					.mouseout(areaHoverCallback(region.area.o,region.area.fill,region.area.stroke));
+			}
+		});
+	
+	if (autologin) {
+		socket.emit( 'join' , 'autojoin-user' );
+	}
 
 });
