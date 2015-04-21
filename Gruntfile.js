@@ -10,6 +10,12 @@ module.exports = function(grunt) {
 					'ember': 'jquery',
 					'bootstrap': 'jquery'
 				},
+				mainFiles: {
+					'ember': [
+						'ember-template-compiler.js',
+    					'ember.debug.js'
+ 					]
+				},
 				bowerOptions: {
 					relative: false
 				}
